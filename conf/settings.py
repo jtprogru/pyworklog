@@ -17,21 +17,20 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Autoload environment from .env file
-ENV_FILE = str(BASE_DIR) + "/.env"
+# Autoload environment from .env.ini file
+ENV_FILE = str(BASE_DIR) + "/.env.ini"
 load_dotenv(dotenv_path=ENV_FILE, verbose=True, override=True)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "$up3RSeCr37KeY")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", False)
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", None).split(",")
 
 # Application definition
 
@@ -42,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'dataloader.apps.DataloaderConfig',
 ]
 
@@ -124,3 +124,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Rescuetime configuration
+RESCUETIME_MAPPING = {
+    2: "Very Productive",
+    1: "Productive",
+    0: "Neutral",
+    -1: "Distracting",
+    -2: "Very Distracting",
+}
+RESCUETIME_ANAPI_DATA_URL = "https://www.rescuetime.com/anapi/data"
+RESCUETIME_ANAPI_PULSE_URL = "https://www.rescuetime.com/anapi/current_productivity_pulse.json"
+RESCUETIME_ANAPI_DAILY_SUMMARY_URL = "https://www.rescuetime.com/anapi/daily_summary_feed.json"
+RESCUETIME_APIKEY = os.getenv('RESCUETIME_APIKEY', None)
